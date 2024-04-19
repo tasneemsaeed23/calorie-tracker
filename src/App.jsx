@@ -1,5 +1,3 @@
-// App.jsx
-import CalorieRecord from "./components/CalorieRecordsSection/CalorieRecord";
 import RecordList from "./components/CalorieRecordsSection/RecordList";
 import CallriesRecordEdit from "./components/edit/CaloriesRecordEdit";
 import { useState } from "react";
