@@ -77,7 +77,9 @@ function CaloriesRecordEdit(props) {
         id="calories"
         value={mealRecord.calories}
         onChange={onCalorieChangeHandler}
-        className={`${styles["calories-input"]} ${styles.error}`}
+        className={`${styles["calories-input"]} ${
+          mealRecord.calories < 0 ? styles.error : ""
+        }`}
       />
       <div className={styles.footer}>
         <button>Add Record</button>
