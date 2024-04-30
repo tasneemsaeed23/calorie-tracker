@@ -3,9 +3,9 @@ import styles from "./RecordList.module.css";
 
 function RecordList(props) {
   return (
-    <ul className={styles.list}>
+    <ul className={styles["record-list"]}>
       {props.records.map((record) => (
-        <li className={styles.listItem} key={record.id}>
+        <li className={styles["list-Item"]} key={record.id}>
           <CalorieRecord
             date={record.date}
             meal={record.meal}
