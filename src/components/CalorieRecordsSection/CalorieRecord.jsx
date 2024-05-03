@@ -1,30 +1,19 @@
-import "./CalorieRecord.css";
+import styles from "./CalorieRecord.module.css";
 import CalorieRecordDate from "./CalorieRecordDate";
 import StyleRecordCell from "../Common/StyledRecoredCell";
 
 function CalorieRecord(props) {
-  let recordContent = (
-    <>
-      <li>{props.meal}</li>
-      <li>{props.content}</li>
-    </>
-  );
-
   if (props.calories < 0) {
-    recordContent = (
-      <>
-        <li></li>
-        <li>Invalid calories</li>
-      </>
-    );
+    return null;
   }
   return (
-    <ul className="record">
+    <ul className={styles.record}>
       <li>
         <CalorieRecordDate date={props.date} />
       </li>
-      {recordContent}
-      <li className="record-calories">
+      <li>{props.meal}</li>
+      <li>{props.content}</li>
+      <li className={styles["record-calories"]}>
         <StyleRecordCell>{props.calories}</StyleRecordCell>
       </li>
     </ul>
