@@ -1,6 +1,6 @@
-import "./StyleRecordCell.css";
+import styles from "./StyleRecordCell.module.css";
 function StyleRecordCell(props) {
-  return <div className="StyleRecordCell">{props.children}</div>;
+  return <div className={styles.StyleRecordCell}>{props.children}</div>;
 }
 
 export default StyleRecordCell;
