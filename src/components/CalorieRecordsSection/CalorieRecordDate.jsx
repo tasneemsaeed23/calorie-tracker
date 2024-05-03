@@ -1,4 +1,4 @@
-import "./CaloriRecordDate.css";
+import styles from "./CaloriRecordDate.module.css";
 import StyleRecordCell from "../Common/StyledRecoredCell";
 
 function CalorieRecordDate(props) {
@@ -7,9 +7,9 @@ function CalorieRecordDate(props) {
   const year = props.date.getFullYear();
   return (
     <StyleRecordCell>
-      <div className="record-date-month">{month}</div>
-      <div className="record-date-day">{day}</div>
-      <div className="record-date-year">{year}</div>
+      <div className={styles["record-date-month"]}>{month}</div>
+      <div className={styles["record-date-day"]}>{day}</div>
+      <div className={styles["record-date-year"]}>{year}</div>
     </StyleRecordCell>
   );
 }
