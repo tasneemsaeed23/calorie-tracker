@@ -1,23 +1,25 @@
 /* Form styles */
 
 .form {
-  background-color: #d4e0ff;
+  background-color: var(--theme-background-ultralight);
   padding: 20px;
   border-radius: 10px;
+  border: 1px solid var(--theme-background-normal);
 }
 
 .form label {
-  color: #333;
+  color: var(--theme-color-dark);
   margin-right: 30px;
   margin-bottom: 10px;
 }
 
 .form input[type="text"],
 .calories-input,
-.form input[type="date"] {
-  background-color: #333;
-  color: #fff;
-  border: none;
+.form input[type="date"],
+.form select {
+  background-color: var(--theme-background-light);
+  color: var(--theme-color-normal);
+  border: 1px solid var(--theme-color-normal);
   padding: 10px;
   border-radius: 5px;
   width: 100%;
@@ -28,23 +30,10 @@
   box-sizing: border-box;
 }
 
-.form select {
-  background-color: #333;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  width: 100%;
-  min-width: 255px;
-  margin-bottom: 20px;
-  display: block;
-  box-sizing: border-box;
-}
-
 .calories-input.error {
-  border: 1px solid red;
-  background-color: white;
-  color: red;
+  border: 1px solid maroon;
+  background-color: var(--theme-background-light);
+  color: maroon;
 }
 
 .footer {
@@ -52,10 +41,10 @@
 }
 
 .footer button {
-  background-color: white;
-  color: #012367;
+  background-color: var(--theme-color-normal);
+  color: var(--theme-background-light);
   display: block;
-  border: 3px solid #012367;
+  border: 3px solid;
   border-radius: 15px;
   padding: 10px;
   cursor: pointer;
