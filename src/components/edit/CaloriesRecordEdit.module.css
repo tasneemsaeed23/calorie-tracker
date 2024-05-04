@@ -5,6 +5,7 @@
   padding: 20px;
   border-radius: 10px;
   border: 1px solid var(--theme-background-normal);
+  display: grid;
 }
 
 .form label {
@@ -49,4 +50,19 @@
   padding: 10px;
   cursor: pointer;
   flex-grow: 1;
+}
+
+@media (min-width: 786px) {
+  .form {
+    grid-template-rows: repeat(2, 1fr) minmax(40px, auto);
+    grid-template-columns: repeat(2, auto 1fr);
+    column-gap: 1rem;
+  }
+
+  .footer {
+    grid-column: 1/-1;
+    justify-self: center;
+    width: 50%;
+    max-width: 250px;
+  }
 }

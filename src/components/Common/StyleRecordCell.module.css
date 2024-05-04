@@ -1,6 +1,5 @@
 .StyleRecordCell {
-  background-color: white;
-  border: 3px solid #012367;
+  border: 2px solid var(--theme-color-normal);
   border-radius: 15px;
   display: flex;
   flex-direction: column;
