@@ -1,6 +1,6 @@
-import RecordList from "./components/CalorieRecordsSection/RecordList";
 import CallriesRecordEdit from "./components/edit/CaloriesRecordEdit";
 import { useState } from "react";
+import ListingSection from "./components/CalorieRecordsSection/ListingSection";
 
 const INITIANL_RECORDS = [
   {
@@ -50,7 +50,7 @@ function App() {
     <>
       <h1>Welcome to calorie</h1>
       <CallriesRecordEdit onFormSubmit={formSubmitHandler} />
-      <RecordList records={records} />
+      <ListingSection allRecords={records} />
     </>
   );
 }
