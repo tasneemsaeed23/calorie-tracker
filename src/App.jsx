@@ -83,7 +83,10 @@ function App() {
         contentLabel="Modal"
         style={modalStyles}
       >
-        <CallriesRecordEdit onFormSubmit={formSubmitHandler} />
+        <CallriesRecordEdit
+          onFormSubmit={formSubmitHandler}
+          onCancel={handleCloseModal}
+        />
       </Modal>
       <ListingSection allRecords={records} />
       <button className={styles["open-modal-btn"]} onClick={handleOpenModal}>

@@ -40,6 +40,11 @@ function CaloriesRecordEdit(props) {
     setMealRecord(DEFAULT_VALUE);
   };
 
+  const onCancelHandler = () => {
+    setMealRecord(DEFAULT_VALUE);
+    props.onCancel();
+  };
+
   return (
     <form className={styles.form} onSubmit={onSubmitHandler}>
       <label htmlFor="date">Date: </label>
@@ -83,6 +88,13 @@ function CaloriesRecordEdit(props) {
       />
       <div className={styles.footer}>
         <button>Add Record</button>
+        <button
+          className={styles["secondary"]}
+          type="button"
+          onClick={onCancelHandler}
+        >
+          Cancel
+        </button>
       </div>
     </form>
   );

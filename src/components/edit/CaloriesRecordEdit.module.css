@@ -1,5 +1,3 @@
-/* Form styles */
-
 .form {
   background-color: var(--theme-background-ultralight);
   padding: 20px;
@@ -39,6 +37,7 @@
 
 .footer {
   display: flex;
+  justify-content: space-evenly;
 }
 
 .footer button {
@@ -49,7 +48,12 @@
   border-radius: 15px;
   padding: 10px;
   cursor: pointer;
-  flex-grow: 1;
+  width: 200px;
+}
+.footer button.secondary {
+  background-color: var(--theme-background-light);
+  border: 1px solid var(--theme-background-normal);
+  color: var(--theme-color-normal);
 }
 
 @media (min-width: 786px) {
@@ -62,7 +66,6 @@
   .footer {
     grid-column: 1/-1;
     justify-self: center;
-    width: 50%;
-    max-width: 250px;
+    width: 100%;
   }
 }
