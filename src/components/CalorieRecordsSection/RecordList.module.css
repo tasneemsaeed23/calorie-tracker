@@ -11,3 +11,15 @@
 .list-item:last-child {
   border-bottom: none;
 }
+
+.placeholder {
+  max-width: 100%; /* Allow the div to be as wide as its parent container */
+  border: 1px solid var(--theme-color-normal);
+  border-radius: 15px;
+  text-align: center;
+  margin: 20px 0;
+  font-size: 20px;
+  color: var(--theme-color-normal);
+  overflow: hidden; /* Hide any content that exceeds the dimensions */
+  white-space: nowrap; /* Prevent text from wrapping to the next line */
+}
