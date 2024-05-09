@@ -2,7 +2,12 @@ import { useState } from "react";
 import styles from "./CaloriesRecordEdit.module.css";
 
 function CaloriesRecordEdit(props) {
-  let DEFAULT_VALUE = { date: "", meal: "", content: "", calories: "" };
+  let DEFAULT_VALUE = {
+    date: "",
+    meal: "Breakfast",
+    content: "",
+    calories: "",
+  };
 
   const [mealRecord, setMealRecord] = useState(DEFAULT_VALUE);
 
