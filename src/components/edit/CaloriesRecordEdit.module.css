@@ -56,6 +56,13 @@
   color: var(--theme-color-normal);
 }
 
+.footer button.disabled {
+  background-color: lightgray;
+  border-width: 0;
+  color: gray;
+  pointer-events: none;
+}
+
 @media (min-width: 786px) {
   .form {
     grid-template-rows: repeat(2, 1fr) minmax(40px, auto);
