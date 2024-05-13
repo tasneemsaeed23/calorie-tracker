@@ -6,7 +6,6 @@ function ListingSection(props) {
   // ListingSection component
   const { allRecords } = props; // Destructuring props
   const [currentDate, setCurrentDate] = useState(new Date());
-  const [user, setUser] = useState({});
 
   // Handler for date change
   const dateChangeHandler = (event) => {
@@ -23,25 +22,16 @@ function ListingSection(props) {
     );
   };
 
-  // Function to fetch user data
-  const getUser = async () => {
-    console.log("Making a new HTTP request");
+  // Removed the getUser function and related code (commented out)
+  // const getUser = async () => {
+  //   console.log("Making a new HTTP request");
+  //   // ... (previous getUser code)
+  // };
 
-    const response = await fetch(
-      "https://random-data-api.com/api/users/random_user?"
-    );
-    const data = await response.json();
-    setUser({
-      id: data.id,
-      firstName: data["first_name"],
-      lastName: data["last_name"],
-    });
-  };
-
-  // Effect hook to fetch user data when component mounts
-  useEffect(() => {
-    getUser();
-  }, []);
+  // Effect hook to fetch user data when component mounts (commented out)
+  // useEffect(() => {
+  //   getUser();
+  // }, []);
 
   // JSX rendering
   return (
@@ -60,12 +50,12 @@ function ListingSection(props) {
       />
       {/* Render RecordList component passing filtered records */}
       <RecordList records={allRecords.filter(dateFilter)} />
-      {/* Display user data */}
-      <div>
+      {/* Removed user data display (commented out) */}
+      {/* <div>
         <p>{user.id}</p>
         <p>{user.firstName}</p>
         <p>{user.lastName}</p>
-      </div>
+      </div> */}
     </>
   );
 }
