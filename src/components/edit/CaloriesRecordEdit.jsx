@@ -11,17 +11,20 @@ function CaloriesRecordEdit(props) {
 
   const [mealRecord, setMealRecord] = useState(DEFAULT_VALUE);
   const [isFormValid, setIsFormValid] = useState(false);
+  const [isDateValid, setIsDateValid] = useState(false);
+  const [isContentValid, setIsContentValid] = useState(false);
+  const [isCaloriesValid, setIsCaloriesValid] = useState(true);
 
   useEffect(() => {
-    console.log("Excuting useEffect");
-    setIsFormValid(mealRecord.date && mealRecord.content);
-  }, [mealRecord.date, mealRecord.content]);
+    setIsFormValid(isContentValid && isDateValid && isCaloriesValid);
+  }, [isContentValid, isDateValid, isCaloriesValid]);
 
   const onDateChangeHandler = (event) => {
     setMealRecord({
       ...mealRecord,
       date: event.target.value,
     });
+    setIsDateValid(!!event.target.value);
   };
 
   const onMealChangeHandler = (event) => {
@@ -36,6 +39,7 @@ function CaloriesRecordEdit(props) {
       ...mealRecord,
       content: event.target.value,
     });
+    setIsContentValid(!!event.target.value);
   };
 
   const onCalorieChangeHandler = (event) => {
@@ -43,6 +47,10 @@ function CaloriesRecordEdit(props) {
       ...mealRecord,
       calories: event.target.value,
     });
+    setIsCaloriesValid(
+      (event.target.value >= 0 && mealRecord.content !== "sport") ||
+        (event.target.value < 0 && mealRecord.content === "sport")
+    );
   };
 
   const onSubmitHandler = (event) => {
@@ -61,14 +69,14 @@ function CaloriesRecordEdit(props) {
       <label htmlFor="date">Date: </label>
       <input
         type="date"
-        name="date"
         id="date"
         value={mealRecord.date}
         onChange={onDateChangeHandler}
+        className={`${styles["form-input"]}${!isDateValid ? styles.error : ""}`}
       />
       <label htmlFor="meal">Meal: </label>
       <select
-        name="meal"
+        className={styles["form-input"]}
         id="meal"
         value={mealRecord.meal}
         onChange={onMealChangeHandler}
@@ -85,6 +93,9 @@ function CaloriesRecordEdit(props) {
         id="content"
         value={mealRecord.content}
         onChange={onContentChangeHandler}
+        className={`${styles["form-input"]}${
+          !isContentValid ? styles.error : ""
+        }`}
       />
       <label htmlFor="calories">Calories: </label>
       <input
@@ -93,8 +104,8 @@ function CaloriesRecordEdit(props) {
         id="calories"
         value={mealRecord.calories}
         onChange={onCalorieChangeHandler}
-        className={`${styles["calories-input"]} ${
-          mealRecord.calories < 0 ? styles.error : ""
+        className={`${styles["form-input"]} ${
+          !isCaloriesValid ? styles.error : ""
         }`}
         min={0}
       />

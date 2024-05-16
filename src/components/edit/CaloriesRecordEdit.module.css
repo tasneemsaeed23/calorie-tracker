@@ -12,10 +12,7 @@
   margin-bottom: 10px;
 }
 
-.form input[type="text"],
-.calories-input,
-.form input[type="date"],
-.form select {
+.form-input {
   background-color: var(--theme-background-light);
   color: var(--theme-color-normal);
   border: 1px solid var(--theme-color-normal);

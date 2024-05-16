@@ -6,6 +6,19 @@ function ListingSection(props) {
   // ListingSection component
   const { allRecords } = props; // Destructuring props
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [filteredRecords, setfilteredRecords] = useState([]);
+
+  useEffect(() => {
+    //Calls API to load data for current date.
+    const timeoutId = setTimeout(() => {
+      setfilteredRecords(allRecords.filter(dateFilter));
+    }, 5000);
+
+    return () => {
+      clearTimeout(timeoutId);
+      console.log("old timeout cleared");
+    };
+  }, [currentDate]);
 
   // Handler for date change
   const dateChangeHandler = (event) => {
@@ -49,7 +62,7 @@ function ListingSection(props) {
         onChange={dateChangeHandler}
       />
       {/* Render RecordList component passing filtered records */}
-      <RecordList records={allRecords.filter(dateFilter)} />
+      <RecordList records={filteredRecords} />
       {/* Removed user data display (commented out) */}
       {/* <div>
         <p>{user.id}</p>
