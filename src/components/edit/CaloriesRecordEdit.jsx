@@ -1,78 +1,136 @@
-// CaloriesRecordEdit.jsx
-
-import { useState, useEffect } from "react";
+import { useState, useEffect, useReducer } from "react";
 import styles from "./CaloriesRecordEdit.module.css";
 
+// Define the initial state for the form fields
+const DEFAULT_VALUE = {
+  date: { value: "", valid: false },
+  meal: { value: "Breakfast", valid: true },
+  content: { value: "", valid: false },
+  calories: { value: 0, valid: true },
+};
+
+// Reducer function to handle form state changes
+function formReducer(state, action) {
+  const { type, key, value } = action;
+
+  // Reset form state to default values
+  if (type === "RESET") {
+    return DEFAULT_VALUE;
+  }
+
+  // Determine the validity of the input value based on the key
+  let valid;
+  switch (key) {
+    case "content":
+      // If content is "sport", calories must be negative; otherwise, calories must be non-negative
+      valid =
+        (value === "sport" && state.calories.value < 0) ||
+        (value !== "sport" && state.calories.value >= 0);
+      return {
+        ...state,
+        content: { value, valid: !!value }, // Update content value and validity
+        calories: { ...state.calories, valid }, // Update calories validity based on content
+      };
+    case "calories":
+      // If content is "sport", calories must be negative; otherwise, calories must be non-negative
+      valid =
+        (state.content.value === "sport" && value < 0) ||
+        (state.content.value !== "sport" && value >= 0);
+      return {
+        ...state,
+        calories: { value, valid }, // Update calories value and validity
+      };
+    default:
+      return {
+        ...state,
+        [key]: { value, valid: !!value }, // Update other fields' values and validity
+      };
+  }
+}
+
+// Component for editing calorie records
 function CaloriesRecordEdit(props) {
-  let DEFAULT_VALUE = {
-    date: "",
-    meal: "Breakfast",
-    content: "",
-    calories: "",
-  };
-
-  const [mealRecord, setMealRecord] = useState(DEFAULT_VALUE);
+  // State to manage form validity
   const [isFormValid, setIsFormValid] = useState(false);
-  const [isDateValid, setIsDateValid] = useState(false);
-  const [isContentValid, setIsContentValid] = useState(false);
-  const [isCaloriesValid, setIsCaloriesValid] = useState(true);
+  // State to manage form state using reducer
+  const [formState, disPatchFn] = useReducer(formReducer, DEFAULT_VALUE);
+  const {
+    date: { valid: isDateValid },
+    content: { valid: isContentValid },
+    calories: { valid: isCaloriesValid },
+  } = formState;
 
+  // Effect to update form validity when form state changes
   useEffect(() => {
     setIsFormValid(isContentValid && isDateValid && isCaloriesValid);
   }, [isContentValid, isDateValid, isCaloriesValid]);
 
+  // Event handler for date input change
   const onDateChangeHandler = (event) => {
-    setMealRecord({
-      ...mealRecord,
-      date: event.target.value,
+    disPatchFn({
+      type: "UPDATE_FIELD",
+      key: "date",
+      value: event.target.value,
     });
-    setIsDateValid(!!event.target.value);
   };
 
+  // Event handler for meal select change
   const onMealChangeHandler = (event) => {
-    setMealRecord({
-      ...mealRecord,
-      meal: event.target.value,
+    disPatchFn({
+      type: "UPDATE_FIELD",
+      key: "meal",
+      value: event.target.value,
     });
   };
 
+  // Event handler for content input change
   const onContentChangeHandler = (event) => {
-    setMealRecord({
-      ...mealRecord,
-      content: event.target.value,
+    disPatchFn({
+      type: "UPDATE_FIELD",
+      key: "content",
+      value: event.target.value,
     });
-    setIsContentValid(!!event.target.value);
   };
 
+  // Event handler for calories input change
   const onCalorieChangeHandler = (event) => {
-    setMealRecord({
-      ...mealRecord,
-      calories: event.target.value,
+    disPatchFn({
+      type: "UPDATE_FIELD",
+      key: "calories",
+      value: event.target.value,
     });
-    setIsCaloriesValid(
-      (event.target.value >= 0 && mealRecord.content !== "sport") ||
-        (event.target.value < 0 && mealRecord.content === "sport")
-    );
   };
 
+  // Event handler for form submission
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    props.onFormSubmit(mealRecord);
-    setMealRecord(DEFAULT_VALUE);
+    // Submit form data
+    props.onFormSubmit(
+      Object.keys(formState).reduce((aggr, cur) => {
+        aggr[cur] = formState[cur].value;
+        return aggr;
+      }, {})
+    );
+    // Reset form state
+    disPatchFn({ type: "RESET" });
   };
 
+  // Event handler for cancel action
   const onCancelHandler = () => {
-    setMealRecord(DEFAULT_VALUE);
+    // Reset form state
+    disPatchFn({ type: "RESET" });
+    // Trigger cancel action
     props.onCancel();
   };
 
+  // Render the form
   return (
     <form className={styles.form} onSubmit={onSubmitHandler}>
       <label htmlFor="date">Date: </label>
       <input
         type="date"
         id="date"
-        value={mealRecord.date}
+        value={formState.date.value}
         onChange={onDateChangeHandler}
         className={`${styles["form-input"]}${!isDateValid ? styles.error : ""}`}
       />
@@ -80,7 +138,7 @@ function CaloriesRecordEdit(props) {
       <select
         className={styles["form-input"]}
         id="meal"
-        value={mealRecord.meal}
+        value={formState.meal.value}
         onChange={onMealChangeHandler}
       >
         <option value="Breakfast">Breakfast</option>
@@ -93,7 +151,7 @@ function CaloriesRecordEdit(props) {
         type="text"
         name="content"
         id="content"
-        value={mealRecord.content}
+        value={formState.content.value}
         onChange={onContentChangeHandler}
         className={`${styles["form-input"]}${
           !isContentValid ? styles.error : ""
@@ -104,12 +162,12 @@ function CaloriesRecordEdit(props) {
         type="number"
         name="calories"
         id="calories"
-        value={mealRecord.calories}
+        value={formState.calories.value}
         onChange={onCalorieChangeHandler}
-        className={`${styles["form-input"]} ${
+        className={`${styles["form-input"]}${
           !isCaloriesValid ? styles.error : ""
         }`}
-        min={0}
+        min={-1000} // Allow negative calorie values
       />
       <div className={styles.footer}>
         <button disabled={!isFormValid}>Add Record</button>
