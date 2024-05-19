@@ -53,7 +53,17 @@ function CaloriesRecordEdit(props) {
   // State to manage form validity
   const [isFormValid, setIsFormValid] = useState(false);
   // State to manage form state using reducer
-  const [formState, disPatchFn] = useReducer(formReducer, DEFAULT_VALUE);
+  const [formState, disPatchFn] = useReducer(
+    formReducer,
+    DEFAULT_VALUE,
+    (initialState) => ({
+      ...initialState,
+      date: {
+        value: props.currentDate.toISOString().split("T")[0],
+        valid: !!props.currentDate,
+      },
+    })
+  );
   const {
     date: { valid: isDateValid },
     content: { valid: isContentValid },
@@ -67,11 +77,18 @@ function CaloriesRecordEdit(props) {
 
   // Event handler for date input change
   const onDateChangeHandler = (event) => {
+    const newDate = new Date(event.target.value); // Parse the date string into a Date object
+    if (isNaN(newDate.getTime())) {
+      console.error("Invalid date format");
+      return;
+    }
+
     disPatchFn({
       type: "UPDATE_FIELD",
       key: "date",
-      value: event.target.value,
+      value: newDate.toISOString(), // Store the ISO string representation of the date
     });
+    props.setCurrentDate(newDate); // Set currentDate as a Date object
   };
 
   // Event handler for meal select change

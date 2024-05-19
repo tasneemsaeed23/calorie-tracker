@@ -1,59 +1,29 @@
 import RecordList from "./RecordList";
 import styles from "./ListingSection.module.css";
-import { useState, useEffect } from "react"; // Importing necessary hooks from React
+import { useState, useEffect } from "react";
 
 function ListingSection(props) {
-  // ListingSection component
-  const { allRecords } = props; // Destructuring props
-  const [currentDate, setCurrentDate] = useState(new Date());
-  const [filteredRecords, setfilteredRecords] = useState([]);
+  const { allRecords, currentDate, setCurrentDate } = props; // Destructuring props
 
-  useEffect(() => {
-    //Calls API to load data for current date.
-    const timeoutId = setTimeout(() => {
-      setfilteredRecords(allRecords.filter(dateFilter));
-    }, 5000);
-
-    return () => {
-      clearTimeout(timeoutId);
-      console.log("old timeout cleared");
-    };
-  }, [currentDate]);
-
-  // Handler for date change
   const dateChangeHandler = (event) => {
     setCurrentDate(new Date(event.target.value));
   };
 
-  // Function to filter records based on the current date
-  const dateFilter = async (record) => {
-    const recordDate = new Date(record.date);
+  const dateFilter = (record) => {
+    // Fixing the condition and adding return statement
     return (
-      recordDate.getDate() === currentDate.getDate() &&
-      recordDate.getMonth() === currentDate.getMonth() &&
-      recordDate.getFullYear() === currentDate.getFullYear()
+      record.date.getDate() === currentDate.getDate() &&
+      record.date.getMonth() === currentDate.getMonth() &&
+      record.date.getFullYear() === currentDate.getFullYear()
     );
   };
 
-  // Removed the getUser function and related code (commented out)
-  // const getUser = async () => {
-  //   console.log("Making a new HTTP request");
-  //   // ... (previous getUser code)
-  // };
-
-  // Effect hook to fetch user data when component mounts (commented out)
-  // useEffect(() => {
-  //   getUser();
-  // }, []);
-
-  // JSX rendering
+  // Returning a single element enclosing the components
   return (
-    <>
-      {/* Label for date picker */}
+    <div>
       <label className={styles["listing-picker-label"]} htmlFor="listingDate">
         Select date
       </label>
-      {/* Date picker input */}
       <input
         id="listingDate"
         className={styles["listing-picker-input"]}
@@ -61,15 +31,9 @@ function ListingSection(props) {
         value={currentDate.toISOString().split("T")[0]}
         onChange={dateChangeHandler}
       />
-      {/* Render RecordList component passing filtered records */}
-      <RecordList records={filteredRecords} />
-      {/* Removed user data display (commented out) */}
-      {/* <div>
-        <p>{user.id}</p>
-        <p>{user.firstName}</p>
-        <p>{user.lastName}</p>
-      </div> */}
-    </>
+      {/* Render the RecordList component */}
+      <RecordList records={allRecords.filter(dateFilter)} />
+    </div>
   );
 }
 

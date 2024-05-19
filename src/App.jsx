@@ -10,6 +10,7 @@ const LOCAL_STORAGE_KEY = "calorieRecord";
 function App() {
   const [records, setRecords] = useState();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
   function save() {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(records));
@@ -83,9 +84,17 @@ function App() {
         <CaloriesRecordEdit
           onFormSubmit={formSubmitHandler}
           onCancel={handleCloseModal}
+          currentDate={currentDate}
+          setCurrentDate={setCurrentDate}
         />
       </Modal>
-      {records && <ListingSection allRecords={records} />}
+      {records && (
+        <ListingSection
+          allRecords={records}
+          currentDate={currentDate}
+          setCurrentDate={setCurrentDate}
+        />
+      )}
       <button className={styles["open-modal-btn"]} onClick={handleOpenModal}>
         Track Food
       </button>
