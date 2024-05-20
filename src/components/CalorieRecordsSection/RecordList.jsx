@@ -3,8 +3,6 @@ import styles from "./RecordList.module.css";
 import { useEffect, useState } from "react";
 
 function RecordList(props) {
-  const [totalCalories, setTotalCalories] = useState(0);
-
   const resultsElement = props.records?.length ? (
     <ul className={styles["record-list"]}>
       {props.records.map(
@@ -16,7 +14,7 @@ function RecordList(props) {
                 meal={record.meal}
                 content={record.content}
                 calories={record.calories}
-                addCalories={setTotalCalories}
+                addCalories={props.setTotalCalories}
               />
             </li>
           )
@@ -29,7 +27,7 @@ function RecordList(props) {
   return (
     <>
       {resultsElement}
-      <label>Total Calories: {totalCalories}</label>
+      <label>Total Calories: {props.totalCalories}</label>
       <br></br>
     </>
   );

@@ -3,14 +3,19 @@ import styles from "./ListingSection.module.css";
 import { useState, useEffect } from "react";
 
 function ListingSection(props) {
-  const { allRecords, currentDate, setCurrentDate } = props; // Destructuring props
+  const {
+    allRecords,
+    currentDate,
+    setCurrentDate,
+    totalCalories,
+    setTotalCalories,
+  } = props;
 
   const dateChangeHandler = (event) => {
     setCurrentDate(new Date(event.target.value));
   };
 
   const dateFilter = (record) => {
-    // Fixing the condition and adding return statement
     return (
       record.date.getDate() === currentDate.getDate() &&
       record.date.getMonth() === currentDate.getMonth() &&
@@ -18,7 +23,6 @@ function ListingSection(props) {
     );
   };
 
-  // Returning a single element enclosing the components
   return (
     <div>
       <label className={styles["listing-picker-label"]} htmlFor="listingDate">
@@ -31,8 +35,11 @@ function ListingSection(props) {
         value={currentDate.toISOString().split("T")[0]}
         onChange={dateChangeHandler}
       />
-      {/* Render the RecordList component */}
-      <RecordList records={allRecords.filter(dateFilter)} />
+      <RecordList
+        records={allRecords.filter(dateFilter)}
+        setTotalCalories={setTotalCalories}
+        totalCalories={totalCalories}
+      />
     </div>
   );
 }
