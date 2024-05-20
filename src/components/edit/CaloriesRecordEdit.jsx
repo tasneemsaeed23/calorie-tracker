@@ -1,6 +1,6 @@
 import { useState, useEffect, useReducer, useContext } from "react";
 import styles from "./CaloriesRecordEdit.module.css";
-import AppContext from "./../../app-context";
+import { AppContext } from "./../../AppContext";
 
 // Define the initial state for the form fields
 const DEFAULT_VALUE = {
