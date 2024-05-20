@@ -93,9 +93,6 @@ function App() {
           <CaloriesRecordEdit
             onFormSubmit={formSubmitHandler}
             onCancel={handleCloseModal}
-            currentDate={currentDate}
-            setCurrentDate={setCurrentDate}
-            totalCalories={totalCalories}
           />
         </Modal>
         {records && (

@@ -1,5 +1,6 @@
-import { useState, useEffect, useReducer } from "react";
+import { useState, useEffect, useReducer, useContext } from "react";
 import styles from "./CaloriesRecordEdit.module.css";
+import AppContext from "./../../app-context";
 
 // Define the initial state for the form fields
 const DEFAULT_VALUE = {
@@ -13,54 +14,54 @@ const DEFAULT_VALUE = {
 function formReducer(state, action) {
   const { type, key, value } = action;
 
-  // Reset form state to default values
   if (type === "RESET") {
     return DEFAULT_VALUE;
   }
 
-  // Determine the validity of the input value based on the key
   let valid;
   switch (key) {
     case "content":
-      // If content is "sport", calories must be negative; otherwise, calories must be non-negative
       valid =
         (value === "sport" && state.calories.value < 0) ||
         (value !== "sport" && state.calories.value >= 0);
       return {
         ...state,
-        content: { value, valid: !!value }, // Update content value and validity
-        calories: { ...state.calories, valid }, // Update calories validity based on content
+        content: { value, valid: !!value },
+        calories: { ...state.calories, valid },
       };
     case "calories":
-      // If content is "sport", calories must be negative; otherwise, calories must be non-negative
       valid =
         (state.content.value === "sport" && value < 0) ||
         (state.content.value !== "sport" && value >= 0);
       return {
         ...state,
-        calories: { value, valid }, // Update calories value and validity
+        calories: { value, valid },
+      };
+    case "date":
+      valid = !isNaN(new Date(value).getTime());
+      return {
+        ...state,
+        date: { value, valid },
       };
     default:
       return {
         ...state,
-        [key]: { value, valid: !!value }, // Update other fields' values and validity
+        [key]: { value, valid: !!value },
       };
   }
 }
 
-// Component for editing calorie records
 function CaloriesRecordEdit(props) {
-  // State to manage form validity
   const [isFormValid, setIsFormValid] = useState(false);
-  // State to manage form state using reducer
-  const [formState, disPatchFn] = useReducer(
+  const { currentDate, setCurrentDate, totalCalories } = useContext(AppContext);
+  const [formState, dispatch] = useReducer(
     formReducer,
     DEFAULT_VALUE,
     (initialState) => ({
       ...initialState,
       date: {
-        value: props.currentDate.toISOString().split("T")[0],
-        valid: !!props.currentDate,
+        value: currentDate.toISOString().split("T")[0],
+        valid: !!currentDate,
       },
     })
   );
@@ -70,80 +71,68 @@ function CaloriesRecordEdit(props) {
     calories: { valid: isCaloriesValid },
   } = formState;
 
-  // Effect to update form validity when form state changes
   useEffect(() => {
     setIsFormValid(isContentValid && isDateValid && isCaloriesValid);
   }, [isContentValid, isDateValid, isCaloriesValid]);
 
-  // Event handler for date input change
   const onDateChangeHandler = (event) => {
-    const newDate = new Date(event.target.value); // Parse the date string into a Date object
-    if (isNaN(newDate.getTime())) {
+    const newDate = event.target.value;
+    if (isNaN(new Date(newDate).getTime())) {
       console.error("Invalid date format");
       return;
     }
 
-    disPatchFn({
+    dispatch({
       type: "UPDATE_FIELD",
       key: "date",
-      value: newDate.toISOString(), // Store the ISO string representation of the date
+      value: newDate,
     });
-    props.setCurrentDate(newDate); // Set currentDate as a Date object
+    setCurrentDate(new Date(newDate));
   };
 
-  // Event handler for meal select change
   const onMealChangeHandler = (event) => {
-    disPatchFn({
+    dispatch({
       type: "UPDATE_FIELD",
       key: "meal",
       value: event.target.value,
     });
   };
 
-  // Event handler for content input change
   const onContentChangeHandler = (event) => {
-    disPatchFn({
+    dispatch({
       type: "UPDATE_FIELD",
       key: "content",
       value: event.target.value,
     });
   };
 
-  // Event handler for calories input change
   const onCalorieChangeHandler = (event) => {
-    disPatchFn({
+    dispatch({
       type: "UPDATE_FIELD",
       key: "calories",
-      value: event.target.value,
+      value: parseFloat(event.target.value),
     });
   };
 
-  // Event handler for form submission
   const onSubmitHandler = (event) => {
     event.preventDefault();
-    // Submit form data
     props.onFormSubmit(
       Object.keys(formState).reduce((aggr, cur) => {
         aggr[cur] = formState[cur].value;
         return aggr;
       }, {})
     );
-    // Reset form state
-    disPatchFn({ type: "RESET" });
+    dispatch({ type: "RESET" });
   };
 
-  // Event handler for cancel action
   const onCancelHandler = () => {
-    // Reset form state
-    disPatchFn({ type: "RESET" });
-    // Trigger cancel action
+    dispatch({ type: "RESET" });
     props.onCancel();
   };
 
-  // Render the form
   return (
     <form className={styles.form} onSubmit={onSubmitHandler}>
-      <p className={styles.warning}>You spent {props.totalCalories} calories</p>
+      <p className={styles.warning}>You spent {totalCalories} calories</p>
       <label htmlFor="date">Date: </label>
       <input
         type="date"
@@ -185,7 +174,7 @@ function CaloriesRecordEdit(props) {
         className={`${styles["form-input"]}${
           !isCaloriesValid ? styles.error : ""
         }`}
-        min={-1000} // Allow negative calorie values
+        min={-1000}
       />
       <div className={styles.footer}>
         <button disabled={!isFormValid}>Add Record</button>

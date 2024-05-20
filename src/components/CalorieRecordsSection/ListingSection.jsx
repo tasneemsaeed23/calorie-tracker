@@ -1,15 +1,11 @@
 import RecordList from "./RecordList";
 import styles from "./ListingSection.module.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
+import AppContext from "./../../app-context";
 
 function ListingSection(props) {
-  const {
-    allRecords,
-    currentDate,
-    setCurrentDate,
-    totalCalories,
-    setTotalCalories,
-  } = props;
+  const { allRecords } = props;
+  const { currentDate, setCurrentDate } = useContext(AppContext);
 
   const dateChangeHandler = (event) => {
     setCurrentDate(new Date(event.target.value));
@@ -35,11 +31,7 @@ function ListingSection(props) {
         value={currentDate.toISOString().split("T")[0]}
         onChange={dateChangeHandler}
       />
-      <RecordList
-        records={allRecords.filter(dateFilter)}
-        setTotalCalories={setTotalCalories}
-        totalCalories={totalCalories}
-      />
+      <RecordList records={allRecords.filter(dateFilter)} />
     </div>
   );
 }

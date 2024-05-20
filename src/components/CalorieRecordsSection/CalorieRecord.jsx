@@ -1,14 +1,16 @@
 import styles from "./CalorieRecord.module.css";
 import CalorieRecordDate from "./CalorieRecordDate";
 import StyleRecordCell from "../Common/StyledRecoredCell";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
+import AppContext from "../../app-context";
 
 function CalorieRecord(props) {
+  const { setTotalCalories: addCalories } = useContext(AppContext);
   useEffect(() => {
-    props.addCalories((prevTotal) => prevTotal + props.calories);
+    addCalories((prevTotal) => prevTotal + props.calories);
     // Return a cleanup function to remove the current calories when this component unmounts or when props.calories changes
     return () => {
-      props.addCalories((prevTotal) => prevTotal - props.calories);
+      addCalories((prevTotal) => prevTotal - props.calories);
     };
   }, []);
 
