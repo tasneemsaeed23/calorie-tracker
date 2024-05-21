@@ -1,6 +1,6 @@
 import RecordList from "./RecordList";
 import styles from "./ListingSection.module.css";
-import { useContext } from "react";
+import { Fragment, useContext } from "react";
 import { AppContext } from "./../../AppContext";
 
 function ListingSection(props) {
@@ -21,7 +21,7 @@ function ListingSection(props) {
   };
 
   return (
-    <div>
+    <Fragment>
       <label className={styles["listing-picker-label"]} htmlFor="listingDate">
         Select date
       </label>
@@ -33,7 +33,7 @@ function ListingSection(props) {
         onChange={dateChangeHandler}
       />
       <RecordList records={allRecords.filter(dateFilter)} />
-    </div>
+    </Fragment>
   );
 }
 
