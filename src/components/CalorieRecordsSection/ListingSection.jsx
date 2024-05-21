@@ -1,14 +1,15 @@
 import RecordList from "./RecordList";
 import styles from "./ListingSection.module.css";
-import { useState, useEffect, useContext } from "react";
+import { useContext } from "react";
 import { AppContext } from "./../../AppContext";
 
 function ListingSection(props) {
   const { allRecords } = props;
-  const { currentDate, setCurrentDate } = useContext(AppContext);
+  const { currentDate, currentDateStr, setCurrentDate } =
+    useContext(AppContext);
 
   const dateChangeHandler = (event) => {
-    setCurrentDate(new Date(event.target.value));
+    setCurrentDate(event.target.value);
   };
 
   const dateFilter = (record) => {
@@ -28,7 +29,7 @@ function ListingSection(props) {
         id="listingDate"
         className={styles["listing-picker-input"]}
         type="date"
-        value={currentDate.toISOString().split("T")[0]}
+        value={currentDateStr}
         onChange={dateChangeHandler}
       />
       <RecordList records={allRecords.filter(dateFilter)} />

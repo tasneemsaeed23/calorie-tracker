@@ -1,37 +1,44 @@
-import CaloriesRecordEdit from "./components/edit/CaloriesRecordEdit";
-import { useState } from "react";
-import ListingSection from "./components/CalorieRecordsSection/ListingSection";
+import { useState, useEffect } from "react";
 import Modal from "react-modal";
 import styles from "./App.module.css";
-import { useEffect } from "react";
+import CaloriesRecordEdit from "./components/edit/CaloriesRecordEdit";
+import ListingSection from "./components/CalorieRecordsSection/ListingSection";
 import AppContextProvider from "./AppContext";
+
 const LOCAL_STORAGE_KEY = "calorieRecord";
 
 function App() {
-  const [records, setRecords] = useState();
+  const [records, setRecords] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  function save() {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(records));
-  }
+  const save = () => {
+    if (records) {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(records));
+    }
+  };
 
-  function loadRecords() {
-    const storageRecords = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (storageRecords != null && storageRecords !== "undefined") {
-      setRecords(
-        JSON.parse(storageRecords).map((record) => ({
-          ...record,
-          date: new Date(record.date),
-          calories: Number(record.calories),
-        }))
-      );
-    } else {
+  const loadRecords = () => {
+    try {
+      const storageRecords = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (storageRecords) {
+        setRecords(
+          JSON.parse(storageRecords).map((record) => ({
+            ...record,
+            date: new Date(record.date),
+            calories: Number(record.calories),
+          }))
+        );
+      } else {
+        setRecords([]);
+      }
+    } catch (error) {
+      console.error("Failed to load records from localStorage:", error);
       setRecords([]);
     }
-  }
+  };
 
   useEffect(() => {
-    if (!records) {
+    if (records === null) {
       loadRecords();
     } else {
       save();
@@ -65,7 +72,7 @@ function App() {
     const formattedRecord = {
       ...record,
       date: new Date(record.date),
-      id: crypto.randomUUID(), //unique random id
+      id: crypto.randomUUID(), // unique random id
     };
     setRecords((prevRecords) => [formattedRecord, ...prevRecords]);
     handleCloseModal();
