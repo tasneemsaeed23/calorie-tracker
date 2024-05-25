@@ -1,6 +1,7 @@
 import { useState, useEffect, useReducer, useContext, useRef } from "react";
 import styles from "./CaloriesRecordEdit.module.css";
 import { AppContext } from "./../../AppContext";
+import FormInput from "../Common/FromInput"; // Ensure correct path
 
 // Define the initial state for the form fields
 const DEFAULT_VALUE = {
@@ -64,13 +65,16 @@ function CaloriesRecordEdit(props) {
   const mealRef = useRef();
 
   useEffect(() => {
-    if (!isContentValid) {
-      contentRef.current.focus();
-    }
     setIsFormValid(
       isContentValid && isDateValid && isCaloriesValid && isMealValid
     );
   }, [isContentValid, isDateValid, isCaloriesValid, isMealValid]);
+
+  useEffect(() => {
+    if (!isContentValid) {
+      contentRef.current.focus();
+    }
+  }, [isContentValid]);
 
   const onDateChangeHandler = (event) => {
     const newDate = event.target.value;
@@ -107,56 +111,45 @@ function CaloriesRecordEdit(props) {
   return (
     <form className={styles.form} onSubmit={onSubmitHandler}>
       <p className={styles.warning}>You spent {totalCalories} calories</p>
-      <label htmlFor="date">Date: </label>
-      <input
+
+      <FormInput
         type="date"
-        id="date"
         value={formState.date.value}
+        id="date"
         onChange={onDateChangeHandler}
-        className={`${styles["form-input"]}${
-          !isDateValid ? ` ${styles.error}` : ""
-        }`}
+        isValid={isDateValid}
       />
-      <label htmlFor="meal">Meal: </label>
-      <select
-        className={styles["form-input"]}
+      <FormInput
+        type="select"
+        label="Meal"
         id="meal"
         value={formState.meal.value}
         onBlur={onMealBlurHandler}
+        isValid={isMealValid}
         ref={mealRef}
       >
         <option value="Breakfast">Breakfast</option>
         <option value="Lunch">Lunch</option>
         <option value="Dinner">Dinner</option>
         <option value="Snack">Snack</option>
-      </select>
-      <label htmlFor="content">Content: </label>
-      <input
+      </FormInput>
+      <FormInput
         type="text"
-        name="content"
+        label="Content"
         id="content"
+        onBlur={onContentBlurHandler}
+        isValid={isContentValid}
         ref={contentRef}
-        value={formState.content.value}
-        onChange={(e) => dispatch({ key: "content", value: e.target.value })}
-        className={`${styles["form-input"]}${
-          !isContentValid ? ` ${styles.error}` : ""
-        }`}
       />
-      <label htmlFor="calories">Calories: </label>
-      <input
+      <FormInput
         type="number"
-        name="calories"
+        label="Calories"
         id="calories"
-        value={formState.calories.value}
-        onChange={(e) =>
-          dispatch({ key: "calories", value: Number(e.target.value) })
-        }
-        className={`${styles["form-input"]}${
-          !isCaloriesValid ? ` ${styles.error}` : ""
-        }`}
+        onBlur={onCalorieBlurHandler}
+        isValid={isCaloriesValid}
         ref={caloriesRef}
-        min={-1000}
       />
+
       <div className={styles.footer}>
         <button disabled={!isFormValid}>Add Record</button>
         <button
