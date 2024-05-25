@@ -2,7 +2,7 @@ import { useState, useEffect, useReducer, useContext, useRef } from "react";
 import styles from "./CaloriesRecordEdit.module.css";
 import { AppContext } from "./../../AppContext";
 import FormInput from "../Common/FromInput"; // Ensure correct path
-
+import Button from "./../Common/Button";
 // Define the initial state for the form fields
 const DEFAULT_VALUE = {
   date: { value: new Date().toISOString().split("T")[0], valid: true },
@@ -151,14 +151,12 @@ function CaloriesRecordEdit(props) {
       />
 
       <div className={styles.footer}>
-        <button disabled={!isFormValid}>Add Record</button>
-        <button
-          className={styles.secondary}
-          type="button"
-          onClick={onCancelHandler}
-        >
+        <Button variant="primary" disabled={!isFormValid}>
+          Add Record
+        </Button>
+        <Button variant="secondary" type="button" onClick={onCancelHandler}>
           Cancel
-        </button>
+        </Button>
       </div>
     </form>
   );
