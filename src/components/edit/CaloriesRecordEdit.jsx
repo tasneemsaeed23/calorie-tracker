@@ -1,4 +1,11 @@
-import { useState, useEffect, useReducer, useContext, useRef } from "react";
+import {
+  useState,
+  useEffect,
+  useReducer,
+  useContext,
+  useRef,
+  useCallback,
+} from "react";
 import styles from "./CaloriesRecordEdit.module.css";
 import { AppContext } from "./../../AppContext";
 import FormInput from "../Common/FromInput"; // Ensure correct path
@@ -104,9 +111,11 @@ function CaloriesRecordEdit(props) {
     });
   };
 
-  const onCancelHandler = () => {
-    props.onCancel();
-  };
+  const onCancelHandler = useCallback(() => {
+    if (isFormValid) {
+      props.onCancel();
+    }
+  }, [isFormValid]);
 
   return (
     <form className={styles.form} onSubmit={onSubmitHandler}>
