@@ -5,6 +5,7 @@ import {
   useContext,
   useRef,
   useCallback,
+  useMemo,
 } from "react";
 import styles from "./CaloriesRecordEdit.module.css";
 import { AppContext } from "./../../AppContext";
@@ -56,7 +57,6 @@ function formReducer(state, action) {
 }
 
 function CaloriesRecordEdit(props) {
-  const [isFormValid, setIsFormValid] = useState(false);
   const { currentDate, setCurrentDate, totalCalories } = useContext(AppContext);
   const [formState, dispatch] = useReducer(formReducer, DEFAULT_VALUE);
 
@@ -71,11 +71,9 @@ function CaloriesRecordEdit(props) {
   const caloriesRef = useRef();
   const mealRef = useRef();
 
-  useEffect(() => {
-    setIsFormValid(
-      isContentValid && isDateValid && isCaloriesValid && isMealValid
-    );
-  }, [isContentValid, isDateValid, isCaloriesValid, isMealValid]);
+  const isFormValid = useMemo(() => {
+    return isContentValid && isDateValid && isCaloriesValid;
+  }, [isContentValid, isDateValid, isCaloriesValid]);
 
   useEffect(() => {
     if (!isContentValid) {
@@ -123,16 +121,17 @@ function CaloriesRecordEdit(props) {
 
       <FormInput
         type="date"
-        value={formState.date.value}
+        defaultValue={formState.date.value}
         id="date"
         onChange={onDateChangeHandler}
         isValid={isDateValid}
       />
+
       <FormInput
         type="select"
         label="Meal"
         id="meal"
-        value={formState.meal.value}
+        defaultValue={formState.meal.value}
         onBlur={onMealBlurHandler}
         isValid={isMealValid}
         ref={mealRef}
