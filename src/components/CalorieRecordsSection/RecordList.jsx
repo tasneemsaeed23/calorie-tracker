@@ -2,6 +2,7 @@ import CalorieRecord from "./CalorieRecord";
 import styles from "./RecordList.module.css";
 import { useContext } from "react";
 import { AppContext } from "./../../AppContext";
+import { Link } from "react-router-dom";
 
 function RecordList(props) {
   const { totalCalories } = useContext(AppContext);
@@ -9,12 +10,10 @@ function RecordList(props) {
     <ul className={styles["record-list"]}>
       {props.records.map((record) => (
         <li className={styles["list-item"]} key={record.id}>
-          <CalorieRecord
-            date={record.date}
-            meal={record.meal}
-            content={record.content}
-            calories={record.calories}
-          />
+          <Link to={`/track/${record.id}`}>
+            {" "}
+            <CalorieRecord {...record} />{" "}
+          </Link>
         </li>
       ))}
     </ul>
