@@ -6,13 +6,13 @@ function SideNav() {
     <nav className={styles.nav}>
       <h1 className={styles.title}>Calorie Tracker</h1>
       <NavLink
-        to="/"
+        to=""
         className={({ isActive }) => (isActive ? styles.active : undefined)}
       >
         Home
       </NavLink>
       <NavLink
-        to="/track"
+        to="track"
         className={({ isActive }) => (isActive ? styles.active : undefined)}
       >
         Track

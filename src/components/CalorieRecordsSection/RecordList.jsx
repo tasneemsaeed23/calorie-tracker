@@ -10,7 +10,7 @@ function RecordList(props) {
     <ul className={styles["record-list"]}>
       {props.records.map((record) => (
         <li className={styles["list-item"]} key={record.id}>
-          <Link to={`/track/${record.id}`}>
+          <Link to={`${record.id}`}>
             {" "}
             <CalorieRecord {...record} />{" "}
           </Link>
