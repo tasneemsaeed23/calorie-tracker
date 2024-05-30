@@ -8,6 +8,7 @@ function SideNav() {
       <NavLink
         to=""
         className={({ isActive }) => (isActive ? styles.active : undefined)}
+        end
       >
         Home
       </NavLink>
